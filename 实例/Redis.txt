@@ -1,0 +1,28 @@
+$ docker search  redis
+
+$ docker pull redis:latest
+
+
+$ docker images
+
+
+$ docker run -itd --name redis-test -p 6379:6379 redis
+
+
+
+$ docker ps
+
+
+
+$ docker exec -it redis-test /bin/bash
+
+
+
+
+
+
+
+
+
+
+

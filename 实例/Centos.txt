@@ -1,0 +1,14 @@
+$ docker search centos
+
+$ docker pull centos:centos7
+
+
+$ docker images
+
+
+$ docker run -itd --name centos-test centos:centos7
+
+
+$ docker ps
+
+

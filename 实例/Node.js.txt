@@ -1,0 +1,14 @@
+$ docker search node
+
+$ docker pull node:latest
+
+
+$ docker images
+
+
+$ docker run -itd --name node-test node
+
+$ docker exec -it node-test /bin/bash
+root@6c5d265c68a6:/# node -v
+
+

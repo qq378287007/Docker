@@ -1,0 +1,17 @@
+$ docker search nginx
+
+$ docker pull nginx:latest
+
+
+$ docker images
+
+
+$ docker run --name nginx-test -p 8080:80 -d nginx
+--name nginx-test：容器名称。
+-p 8080:80： 端口进行映射，将本地 8080 端口映射到容器内部的 80 端口。
+-d nginx： 设置容器在在后台一直运行。
+
+127.0.0.1:8080
+
+
+

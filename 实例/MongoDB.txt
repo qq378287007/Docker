@@ -1,0 +1,27 @@
+$ docker search  mongo
+
+$ docker pull mongo:latest
+
+
+$ docker images
+
+
+$ docker run -itd --name mongo -p 27017:27017 mongo --auth
+--auth：需要密码才能访问容器服务。
+
+$ docker ps
+
+
+
+$ docker exec -it redis-test /bin/bash
+
+
+
+
+
+
+
+
+
+
+
