@@ -1,0 +1,127 @@
+列出本地主机上的镜像
+runoob@runoob:~$ docker images   
+REPOSITORY：表示镜像的仓库源
+TAG：镜像的标签
+IMAGE ID：镜像ID
+CREATED：镜像创建时间
+SIZE：镜像大小
+
+
+runoob@runoob:~$ docker run -t -i ubuntu:15.10 /bin/bash 
+-i: 交互式操作。
+-t: 终端。
+ubuntu:15.10: 这是指用 ubuntu 15.10 版本镜像为基础来启动容器。
+/bin/bash：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 /bin/bash。
+
+不指定一个镜像的版本标签， 将默认使用latest镜像。
+
+
+预先下载这个镜像
+runoob@runoob:~$ docker pull ubuntu:13.10
+
+搜索镜像
+runoob@runoob:~$  docker search httpd
+NAME: 镜像仓库源的名称
+DESCRIPTION: 镜像的描述
+OFFICIAL: 是否 docker 官方发布
+stars: 类似 Github 里面的 star，表示点赞、喜欢的意思。
+AUTOMATED: 自动构建。
+
+删除镜像
+$ docker rmi hello-world
+
+
+更新镜像
+runoob@runoob:~$ docker run -t -i ubuntu:15.10 /bin/bash
+root@e218edb10161:/# apt-get update
+root@e218edb10161:/# exit
+
+runoob@runoob:~$ docker commit -m="has update" -a="runoob" e218edb10161 runoob/ubuntu:v2
+sha256:70bf1840fd7c0d2d8ef0a42a817eb29f854c1af8f7c59fc03ac7bdee9545aff8
+-m: 提交的描述信息
+-a: 指定镜像作者
+e218edb10161：容器 ID
+runoob/ubuntu:v2: 指定要创建的目标镜像名
+
+查看镜像
+runoob@runoob:~$ docker images
+
+使用新镜像来启动一个容器
+runoob@runoob:~$ docker run -t -i runoob/ubuntu:v2 /bin/bash                            
+root@1a9fbdeb5da3:/#
+
+
+
+构建镜像 
+Dockerfile 文件，包含构建镜像的指令。
+runoob@runoob:~$ cat Dockerfile 
+FROM    centos:6.7
+MAINTAINER      Fisher "fisher@sudops.com"
+
+RUN     /bin/echo 'root:123456' |chpasswd
+RUN     useradd runoob
+RUN     /bin/echo 'runoob:123456' |chpasswd
+RUN     /bin/echo -e "LANG=\"en_US.UTF-8\"" >/etc/default/local
+EXPOSE  22
+EXPOSE  80
+CMD     /usr/sbin/sshd -D
+
+runoob@runoob:~$ docker build -t runoob/centos:6.7 .
+Sending build context to Docker daemon 17.92 kB
+Step 1 : FROM centos:6.7
+ ---&gt; d95b5ca17cc3
+Step 2 : MAINTAINER Fisher "fisher@sudops.com"
+ ---&gt; Using cache
+ ---&gt; 0c92299c6f03
+Step 3 : RUN /bin/echo 'root:123456' |chpasswd
+ ---&gt; Using cache
+ ---&gt; 0397ce2fbd0a
+Step 4 : RUN useradd runoob
+......
+
+-t ：指定要创建的目标镜像名
+. ：Dockerfile 文件所在目录，可以指定Dockerfile 的绝对路径
+
+
+设置镜像标签
+runoob@runoob:~$ docker tag 860c279d2fec runoob/centos:dev
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

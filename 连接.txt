@@ -1,0 +1,112 @@
+创建 python 应用容器
+runoob@runoob:~$ docker run -d -P training/webapp python app.py
+fce072cc88cee71b1cdceb57c2821d054a4a59f67da6b416fceb5593f059fc6d
+
+runoob@runoob:~$ docker run -d -p 5000:5000 training/webapp python app.py
+33e4523d30aaf0258915c368e66e03b49535de0ef20317d3f639d40222ba6bc0
+
+runoob@runoob:~$ docker run -d -p 127.0.0.1:5001:5000 training/webapp python app.py
+95c6ceef88ca3e71eaf303c2833fd6701d8d1b2572b5613b5a932dfdfe8a857c
+
+默认都是绑定 tcp 端口
+runoob@runoob:~$ docker run -d -p 127.0.0.1:5000:5000/udp training/webapp python app.py
+
+-P :是容器内部端口随机映射到主机的端口。
+-p : 是容器内部端口绑定到指定的主机端口。
+
+
+查看端口的绑定情况
+runoob@runoob:~$ docker port adoring_stonebraker 5000
+
+# Docker 容器互联
+端口映射并不是唯一把 docker 连接到另一个容器的方法。
+docker 有一个连接系统允许将多个容器连接在一起，共享连接信息。
+docker 连接会创建一个父子关系，其中父容器可以看到子容器的信息。
+
+容器命名
+runoob@runoob:~$  docker run -d -P --name runoob training/webapp python app.py
+43780a6eabaaf14e590b6e849235c75f3012995403f97749775e38436db9a441
+
+查看容器名称
+runoob@runoob:~$ docker ps -l
+
+
+创建一个新的 Docker 网络。
+$ docker network create -d bridge test-net
+-d：参数指定 Docker 网络类型，有 bridge、overlay。
+其中 overlay 网络类型用于 Swarm mode，在本小节中你可以忽略它。
+
+docker network ls
+
+
+运行一个容器并连接到新建的 test-net 网络:
+$ docker run -itd --name test1 --network test-net ubuntu /bin/bash
+$ docker run -itd --name test2 --network test-net ubuntu /bin/bash
+$ docker ps
+
+test1 容器和 test2 容器建立了互联关系。
+
+apt-get update
+apt install iputils-ping
+
+分别进入test1容器和test2容器，执行ping
+docker exec -it test1 /bin/bash
+docker exec -it test2 /bin/bash
+ping test2
+ping test1
+
+
+
+设置全部容器的 DNS
+sudo gedit /etc/docker/daemon.json
+{
+  "dns" : [
+    "114.114.114.114",
+    "8.8.8.8"
+  ]
+}
+重启生效
+/etc/init.d/docker restart
+输出容器的 DNS 信息
+$ docker run -it --rm  ubuntu  cat etc/resolv.conf
+
+指定的容器设置 DNS
+$ docker run -it --rm -h host_ubuntu  --dns=114.114.114.114 --dns-search=test.com ubuntu
+--rm：容器退出时自动清理容器内部的文件系统。
+-h HOSTNAME 或者 --hostname=HOSTNAME： 设定容器的主机名，它会被写到容器内的 /etc/hostname 和 /etc/hosts。
+--dns=IP_ADDRESS： 添加 DNS 服务器到容器的 /etc/resolv.conf 中，让容器用这个服务器来解析所有不在 /etc/hosts 中的主机名。
+--dns-search=DOMAIN： 设定容器的搜索域，当设定搜索域为 .example.com 时，在搜索一个名为 host 的主机时，DNS 不仅搜索 host，还会搜索 host.example.com。
+
+root@host_ubuntu:/# cat /etc/hostname
+root@host_ubuntu:/# cat /etc/hosts
+root@host_ubuntu:/# cat /etc/resolv.conf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
