@@ -1,0 +1,106 @@
+Docker Swarm 是 Docker 的集群管理工具。
+它将 Docker 主机池转变为单个虚拟 Docker 主机。 
+Docker Swarm 提供了标准的 Docker API，所有任何已经与 Docker 守护程序通信的工具都可以使用 Swarm 轻松地扩展到多个主机。
+
+
+swarm 集群由管理节点（manager）和工作节点（work node）构成。
+swarm mananger：负责整个集群的管理工作包括集群配置、服务管理等所有跟集群有关的工作。
+work node：即图中的 available node，主要负责运行相应的服务来执行任务（task）。
+
+
+
+使用
+
+创建 swarm 集群管理节点（manager）
+$ docker-machine create -d virtualbox swarm-manager
+
+初始化 swarm 集群，进行初始化的这台机器，就是集群的管理节点。
+$ docker-machine ssh swarm-manager
+$ docker swarm init --advertise-addr 192.168.99.107 #这里的 IP 为创建机器时分配的 ip。
+
+
+增加工作节点时会用到
+docker swarm join --token SWMTKN-1-4oogo9qziq768dma0uh3j0z0m5twlm10iynvz7ixza96k6jh9p-ajkb6w7qd06y1e33yrgko64sk 192.168.99.107:2377
+
+
+创建 swarm 集群工作节点（worker）
+$ docker-machine create -d virtualbox swarm-worker1 
+$ docker-machine create -d virtualbox swarm-worker2
+
+$ docker-machine ls
+$ docker-machine ssh swarm-worker1 
+$ docker swarm join --token SWMTKN-1-4oogo9qziq768dma0uh3j0z0m5twlm10iynvz7ixza96k6jh9p-ajkb6w7qd06y1e33yrgko64sk 192.168.99.107:2377
+
+
+
+查看集群信息
+$ docker info
+
+
+
+部署服务到集群中
+跟集群管理有关的任何操作，都是在管理节点上操作的。
+
+在一个工作节点上创建一个名为 helloworld 的服务，这里是随机指派给一个工作节点：
+docker@swarm-manager:~$ docker service create --replicas 1 --name helloworld alpine ping docker.com
+
+
+查看服务部署情况
+docker@swarm-manager:~$ docker service ps helloworld
+
+查看 helloworld 部署的具体信息
+docker@swarm-manager:~$ docker service inspect --pretty helloworld
+
+
+扩展集群服务
+
+helloworld 服务扩展到俩个节点。
+docker@swarm-manager:~$ docker service scale helloworld=2
+
+
+docker@swarm-manager:~$ docker service ps helloworld
+
+
+删除服务
+docker@swarm-manager:~$ docker service rm helloworld
+docker@swarm-manager:~$ docker service ps helloworld
+
+
+
+滚动升级服务
+docker@swarm-manager:~$ docker service create --replicas 1 --name redis --update-delay 10s redis:3.0.6
+docker@swarm-manager:~$ docker service update --image redis:3.0.7 redis
+
+
+停止某个节点接收新的任务
+
+查看所有的节点：
+docker@swarm-manager:~$ docker node ls
+
+停止节点 swarm-worker1：
+docker@swarm-manager:~$  docker node update --availability drain swarm-worker1
+注意：swarm-worker1 状态变为 Drain。不会影响到集群的服务，只是 swarm-worker1 节点不再接收新的任务，集群的负载能力有所下降。
+
+
+
+重新激活节点：
+docker@swarm-manager:~$  docker node update --availability active swarm-worker1
+docker@swarm-manager:~$ docker node ls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
