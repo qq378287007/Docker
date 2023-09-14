@@ -1,10 +1,11 @@
-# Docker 客户端
-查看到 Docker 客户端的所有命令选项。
-runoob@runoob:~# docker
+查看Docker客户端的所有命令选项。
+$ docker
 
 
 docker command --help 深入了解指定Docker命令使用方法。
-runoob@runoob:~# docker stats --help
+$ docker stats --help
+
+
 
 # 容器使用
 获取镜像
@@ -12,6 +13,8 @@ $ docker pull ubuntu
 
 启动容器
 $ docker run -it ubuntu /bin/bash
+# exit
+
 
 查看所有容器
 $ docker ps -a
@@ -36,15 +39,17 @@ $ docker restart <容器 ID>
 $ docker attach 1e560fca3906 
 如果从这个容器退出，会导致容器的停止。
 
-docker exec -it 243c32535da7 /bin/bash
+$ docker exec -it 243c32535da7 /bin/bash
 如果从这个容器退出，容器不会停止
 
 
 导出和导入容器
 $ docker export 1e560fca3906 > ubuntu.tar
 
-$ cat docker/ubuntu.tar | docker import - test/ubuntu:v1
+$ cat ubuntu.tar | docker import - test/ubuntu:v1
 $ docker import http://example.com/exampleimage.tgz example/imagerepo
+
+$ docker images
 
 删除容器
 $ docker rm -f 1e560fca3906
@@ -55,54 +60,47 @@ $ docker container prune
 
 
 web应用
-runoob@runoob:~# docker pull training/webapp  # 载入镜像
-runoob@runoob:~# docker run -d -P training/webapp python app.py
+$ docker pull training/webapp  # 载入镜像
+$ docker run -d -P training/webapp python app.py
 -d:让容器在后台运行。
 -P:将容器内部使用的网络端口随机映射到我们使用的主机上。
 
-runoob@runoob:~#  docker ps
-127.0.0.1:5555
+$ docker ps
+0.0.0.0:32768
 
-runoob@runoob:~$ docker run -d -p 5000:5000 training/webapp python app.py
- -p 参数来设置不一样的端口
+$ docker run -d -p 5000:5000 training/webapp python app.py
+-p 参数来设置不一样的端口
 
 查看容器端口的映射情况。
-runoob@runoob:~$ docker port bf08b7f2cd89
+$ docker port bf08b7f2cd89
 
 查看容器内部的标准输出。
-runoob@runoob:~$ docker logs -f bf08b7f2cd89
+$ docker logs -f bf08b7f2cd89
+-f: 让 docker logs 像使用 tail -f 一样来输出容器内部的标准输出。
 
 
 查看容器内部运行的进程
-runoob@runoob:~$ docker top wizardly_chandrasekhar
+$ docker top wizardly_chandrasekhar
 
 
 查看 Docker 的底层信息
-runoob@runoob:~$ docker inspect wizardly_chandrasekhar
+$ docker inspect wizardly_chandrasekhar
+返回一个 JSON 文件记录着 Docker 容器的配置和状态信息。
+
+停止WEB应用容器
+$ docker stop 6457
+
+重启WEB应用容器
+$ docker start 6457
+
+
 
 查询最后一次创建的容器
 #  docker ps -l 
 
 删除不需要的容器
-runoob@runoob:~$ docker rm wizardly_chandrasekhar  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$ docker stop 6457
+$ docker rm 6457  
 
 
 
