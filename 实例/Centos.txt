@@ -8,6 +8,8 @@ $ docker images
 
 $ docker run -itd --name centos-test centos:centos7
 
+$ docker exec -it centos-test /bin/bash
+# exit
 
 $ docker ps
 

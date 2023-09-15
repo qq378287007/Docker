@@ -2,13 +2,8 @@ $ docker search ubuntu
 
 $ docker pull ubuntu
 
-
 $ docker images
-
 
 $ docker run -itd --name ubuntu-test ubuntu
 
-
 $ docker ps
-
-

@@ -11,7 +11,24 @@ $ docker run --name nginx-test -p 8080:80 -d nginx
 -p 8080:80： 端口进行映射，将本地 8080 端口映射到容器内部的 80 端口。
 -d nginx： 设置容器在在后台一直运行。
 
+
 127.0.0.1:8080
+0.0.0.0:8080
 
 
+
+
+容器（docker），docker inspect nginx-test
+172.17.0.2
+
+虚拟机（ubuntu）,ifconfig
+192.168.234.129 
+
+
+宿主机（windows），ipconfig
+10.11.124.190
+
+
+宿主机访问虚拟机内容器
+http://192.168.234.129:8080/
 
