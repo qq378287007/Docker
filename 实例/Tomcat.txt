@@ -1,34 +1,29 @@
 $ docker search tomcat
-
 $ docker pull tomcat
-
-
 $ docker images|grep tomcat
 
 
-
+webapps 目录将映射为 tomcat 容器配置的应用程序目录。
+logs 目录将映射为 tomcat 容器的日志目录。
+conf 目录里的配置文件将映射为 tomcat 容器的配置文件。
 
 $ mkdir -p ~/tomcat/webapps ~/tomcat/logs ~/tomcat/conf
-
-#Dockerfile
-    webapps 目录将映射为 tomcat 容器配置的应用程序目录。
-    logs 目录将映射为 tomcat 容器的日志目录。
-    conf 目录里的配置文件将映射为 tomcat 容器的配置文件。
-    进入创建的 tomcat 目录，创建 Dockerfile。
+$ cd ~/tomcat/
+$ sudo gedit Dockerfile
 $ docker build -t tomcat .
-$ docker images|grep tomcat
 
+
+$ cd ~/tomcat/
 $ docker run --name tomcat -p 8080:8080 -v $PWD/test:/usr/local/tomcat/webapps/test -d tomcat  
 acb33fcb4beb8d7f1ebace6f50f5fc204b1dbe9d524881267aa715c61cf75320
--p 8080:8080：将主机的 8080 端口映射到容器的 8080 端口。
--v $PWD/test:/usr/local/tomcat/webapps/test：将主机中当前目录下的 test 挂载到容器的 /test。
+-p 8080:8080：
+    将主机的 8080 端口映射到容器的 8080 端口。
+-v $PWD/test:/usr/local/tomcat/webapps/test：
+    将主机中当前目录下的 test 挂载到容器的 /test。
 $ docker ps 
 
+
 127.0.0.1:8080
-
-
-
-
 
 
 FROM openjdk:8-jre
