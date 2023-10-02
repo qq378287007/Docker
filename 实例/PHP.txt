@@ -6,9 +6,11 @@ $ docker pull php:5.6-fpm
 $ docker images
 
 
-$ docker run --name  myphp-fpm -v ~/nginx/www:/www  -d php:5.6-fpm
---name myphp-fpm : 将容器命名为 myphp-fpm。
--v ~/nginx/www:/www : 将主机中项目的目录 www 挂载到容器的 /www
+$ docker run --name myphp-fpm -v ~/nginx/www:/www -d php:5.6-fpm
+--name myphp-fpm: 
+    将容器命名为 myphp-fpm。
+-v ~/nginx/www:/www:
+    将主机中项目的目录 www 挂载到容器的 /www
 
 mkdir ~/nginx/conf/conf.d 
 
@@ -34,4 +36,24 @@ server {
         include        fastcgi_params;
     }
 }
+php:9000: 表示 php-fpm 服务的 URL，下面我们会具体说明。
+/www/: 是 myphp-fpm 中 php 文件的存储路径，映射到本地的 ~/nginx/www 目录。
+
+docker run --name runoob-php-nginx -p 8083:80 -d \
+    -v ~/nginx/www:/usr/share/nginx/html:ro \
+    -v ~/nginx/conf/conf.d:/etc/nginx/conf.d:ro \
+    --link myphp-fpm:php \
+    nginx
+
+
+sudo gedit ~/nginx/www/index.php
+<?php
+echo phpinfo();
+?>
+
+
+http://127.0.0.1:8083/index.php
+
+
+
 
