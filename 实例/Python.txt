@@ -1,31 +1,12 @@
 $ docker search python
-
 $ docker pull python:3.5
-
 $ docker images python:3.5 
 
 
-
-
-$ mkdir -p ~/python ~/python/myapp
+$ mkdir -p ~/python
 $ cd ~/python
 $ sudo gedit Dockerfile
-
 $ docker build -t python:3.5 .
-
-$ cd ~/python/myapp
-~/python/myapp 目录下创建一个 helloworld.py 文件
-#!/usr/bin/python
-
-print("Hello, World!");
-
-$ docker run  -v $PWD/myapp:/usr/src/myapp  -w /usr/src/myapp python:3.5 python helloworld.py
--v $PWD/myapp:/usr/src/myapp: 将主机中当前目录下的 myapp 挂载到容器的 /usr/src/myapp。
--w /usr/src/myapp: 指定容器的 /usr/src/myapp 目录为工作目录。
-python helloworld.py: 使用容器的 python 命令来执行工作目录中的 helloworld.py 文件。
-
-
-
 
 FROM buildpack-deps:jessie
 
@@ -80,7 +61,20 @@ RUN cd /usr/local/bin \
 CMD ["python3"]
 
 
+$ mkdir -p ~/python/myapp
+$ cd ~/python/myapp
+$ sudo gedit helloworld.py
+$ cd ~/python/
+$ docker run -v $PWD/myapp:/usr/src/myapp  -w /usr/src/myapp python:3.5 python helloworld.py
+-v $PWD/myapp:/usr/src/myapp: 
+        将主机中当前目录下的 myapp 挂载到容器的 /usr/src/myapp。
+-w /usr/src/myapp:
+         指定容器的 /usr/src/myapp 目录为工作目录。
+python helloworld.py: 
+        使用容器的 python 命令来执行工作目录中的 helloworld.py 文件。
 
 
+#!/usr/bin/python
 
+print("Hello, World!");
 

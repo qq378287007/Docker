@@ -16,6 +16,8 @@ mysql -h localhost -u root -p
 $ docker ps
 
 
+$ docker exec -it mysql-test mysql -h localhost -u root -p
+
 
 
 

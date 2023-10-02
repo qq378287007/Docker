@@ -14,4 +14,3 @@ $ docker exec -it redis-test /bin/bash
 # redis-cli
 # set test 1
 
-
